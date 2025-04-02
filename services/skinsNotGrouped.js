@@ -154,12 +154,6 @@ const parseItem = (item, items) => {
                     pattern: $t(paintKits[pattern]?.description_tag),
                     wear: $t(wear),
                 }),
-            description: getDescription(
-                translatedDescription,
-                paintKits,
-                pattern,
-                type === "skin_stattrak",
-            ),
             weapon: {
                 id: weapon,
                 weapon_id: weaponIDMapping[weapon],
@@ -188,17 +182,16 @@ const parseItem = (item, items) => {
                 color: getRarityColor(rarity),
             },
             ...(dopplerPhase && { phase: dopplerPhase }),
-            // Comment this because it makes JSON file too big.
-            // collections:
-            //     collectionsBySkins?.[`skin-${item.object_id}`]?.map((i) => ({
-            //         ...i,
-            //         name: $t(i.name),
-            //     })) ?? [],
-            // crates:
-            //     cratesBySkins?.[`skin-${item.object_id}`]?.map((i) => ({
-            //         ...i,
-            //         name: $t(i.name),
-            //     })) ?? [],
+            collections:
+                collectionsBySkins?.[`skin-${item.object_id}`]?.map((i) => ({
+                    ...i,
+                    name: $t(i.name),
+                })) ?? [],
+            crates:
+                cratesBySkins?.[`skin-${item.object_id}`]?.map((i) => ({
+                    ...i,
+                    name: $t(i.name),
+                })) ?? [],
             market_hash_name: skinMarketHashName({
                 itemName: !isNotWeapon(weapon)
                     ? $t(items[weapon].item_name_prefab, true)
@@ -211,15 +204,6 @@ const parseItem = (item, items) => {
                 isVanilla: false,
             }),
             special_notes: specialNotes?.[`skin-${item.object_id}`],
-            team: {
-                id: team,
-                name:
-                    team === "both"
-                        ? $t("inv_filter_both_teams")
-                        : team === "counter-terrorists"
-                            ? $t("inv_filter_ct")
-                            : $t("inv_filter_t"),
-            },
             style: {
                 id: paintKits[pattern]?.style_id,
                 name: $t(paintKits[pattern]?.style_name),
